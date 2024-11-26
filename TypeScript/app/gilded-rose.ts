@@ -39,8 +39,8 @@ export class GildedRose {
         item.sellIn -= 1;
       }
       if (item.sellIn < 0) {
-        if (item.name == "Aged Brie" && item.quality < 50) {
-          item.quality += 1;
+        if (item.name == "Aged Brie") {
+          item.quality = Math.min(50, item.quality + 1);
         } else if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
           item.quality = 0;
         } else if (
