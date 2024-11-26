@@ -14,12 +14,26 @@ describe("Gilded Rose", () => {
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(11);
 
-    // Testing the edge case where quality can't exceed 50
     gildedRose.updateQuality();
     expect(items[0].quality).toBe(12);
-    for (let i = 0; i < 40; i++) {
+    for (let day = 0; day < 40; day++) {
       gildedRose.updateQuality();
     }
     expect(items[0].quality).toBe(50);
+  });
+});
+
+describe("Gilded Rose", () => {
+  it("should not modify Sulfuras, Hand of Ragnaros over multiple days", () => {
+    const sulfurasItem = new Item("Sulfuras, Hand of Ragnaros", 0, 80);
+    const gildedRose = new GildedRose([sulfurasItem]);
+
+    for (let day = 1; day <= 30; day++) {
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].name).toBe("Sulfuras, Hand of Ragnaros");
+      expect(items[0].sellIn).toBe(0);
+      expect(items[0].quality).toBe(80);
+    }
   });
 });
