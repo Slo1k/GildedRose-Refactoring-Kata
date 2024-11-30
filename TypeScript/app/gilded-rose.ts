@@ -10,6 +10,40 @@ export class Item {
   }
 }
 
+const ItemTypes = {
+  AGED_BRIE: "Aged Brie",
+  BACKSTAGE_PASSES: "Backstage passes to a TAFKAL80ETC concert",
+  SULFURAS: "Sulfuras, Hand of Ragnaros",
+};
+
+const updateAgedBrie = (item: Item) => {
+  item.quality = Math.min(50, item.quality + 1);
+  item.sellIn -= 1;
+  if (item.sellIn < 0) item.quality = Math.min(50, item.quality + 1);
+};
+
+const updateBackstagePasses = (item: Item) => {
+  if (item.sellIn < 6) {
+    item.quality = Math.min(50, item.quality + 3);
+  } else if (item.sellIn < 11) {
+    item.quality = Math.min(50, item.quality + 2);
+  } else {
+    item.quality = Math.min(50, item.quality + 1);
+  }
+  item.sellIn -= 1;
+  if (item.sellIn < 0) item.quality = 0;
+};
+
+const updateSulfuras = (item: Item) => {};
+
+const updateDefault = (item: Item) => {
+  if (item.quality > 0) {
+    item.quality -= 1;
+  }
+  item.sellIn -= 1;
+  if (item.sellIn < 0 && item.quality > 0) item.quality -= 1;
+};
+
 export class GildedRose {
   items: Array<Item>;
 
@@ -19,41 +53,19 @@ export class GildedRose {
 
   updateQuality() {
     for (const item of this.items) {
-      if (item.name === "Sulfuras, Hand of Ragnaros") {
-        continue;
-      }
-
-      if (
-        item.name !== "Aged Brie" &&
-        item.name !== "Backstage passes to a TAFKAL80ETC concert"
-      ) {
-        if (item.quality > 0) {
-          item.quality -= 1;
-        }
-      } else {
-        if (item.name === "Aged Brie") {
-          item.quality = Math.min(50, item.quality + 1);
-        } else if (item.name === "Backstage passes to a TAFKAL80ETC concert") {
-          if (item.sellIn < 6) {
-            item.quality = Math.min(50, item.quality + 3);
-          } else if (item.sellIn < 11) {
-            item.quality = Math.min(50, item.quality + 2);
-          } else {
-            item.quality = Math.min(50, item.quality + 1);
-          }
-        }
-      }
-
-      item.sellIn -= 1;
-
-      if (item.sellIn < 0) {
-        if (item.name === "Aged Brie") {
-          item.quality = Math.min(50, item.quality + 1);
-        } else if (item.name === "Backstage passes to a TAFKAL80ETC concert") {
-          item.quality = 0;
-        } else if (item.quality > 0) {
-          item.quality -= 1;
-        }
+      switch (item.name) {
+        case ItemTypes.AGED_BRIE:
+          updateAgedBrie(item);
+          continue;
+        case ItemTypes.BACKSTAGE_PASSES:
+          updateBackstagePasses(item);
+          continue;
+        case ItemTypes.SULFURAS:
+          updateSulfuras(item);
+          continue;
+        default:
+          updateDefault(item);
+          continue;
       }
     }
     return this.items;
