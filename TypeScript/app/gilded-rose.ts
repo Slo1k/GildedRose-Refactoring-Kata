@@ -16,32 +16,36 @@ const ItemTypes = {
   SULFURAS: "Sulfuras, Hand of Ragnaros",
 };
 
+const MAX_QUALITY = 50;
+const MIN_QUALITY = 0;
+const MIN_SELLIN = 0;
+
 const updateAgedBrie = (item: Item) => {
-  item.quality = Math.min(50, item.quality + 1);
+  item.quality = Math.min(MAX_QUALITY, item.quality + 1);
   item.sellIn -= 1;
-  if (item.sellIn < 0) item.quality = Math.min(50, item.quality + 1);
+  if (item.sellIn < MIN_SELLIN) item.quality = Math.min(MAX_QUALITY, item.quality + 1);
 };
 
 const updateBackstagePasses = (item: Item) => {
   if (item.sellIn < 6) {
-    item.quality = Math.min(50, item.quality + 3);
+    item.quality = Math.min(MAX_QUALITY, item.quality + 3);
   } else if (item.sellIn < 11) {
-    item.quality = Math.min(50, item.quality + 2);
+    item.quality = Math.min(MAX_QUALITY, item.quality + 2);
   } else {
-    item.quality = Math.min(50, item.quality + 1);
+    item.quality = Math.min(MAX_QUALITY, item.quality + 1);
   }
   item.sellIn -= 1;
-  if (item.sellIn < 0) item.quality = 0;
+  if (item.sellIn < MIN_SELLIN) item.quality = 0;
 };
 
 const updateSulfuras = (item: Item) => {};
 
 const updateDefault = (item: Item) => {
-  if (item.quality > 0) {
+  if (item.quality > MIN_QUALITY) {
     item.quality -= 1;
   }
   item.sellIn -= 1;
-  if (item.sellIn < 0 && item.quality > 0) item.quality -= 1;
+  if (item.sellIn < MIN_SELLIN && item.quality > MIN_QUALITY) item.quality -= 1;
 };
 
 export class GildedRose {
