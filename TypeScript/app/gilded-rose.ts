@@ -8,6 +8,16 @@ export class Item {
     this.sellIn = sellIn;
     this.quality = quality;
   }
+
+  updateQuality(value: number) {
+    if (value >= MIN_QUALITY && value <= MAX_QUALITY) this.quality = value;
+  }
+  increaseQuality(value: number) {
+    if (value > 0) this.quality = Math.min(MAX_QUALITY, this.quality + value);
+  }
+  decreaseQuality(value: number) {
+    if (value > 0) this.quality = Math.max(MIN_QUALITY, this.quality - value);
+  }
 }
 
 const ItemTypes = {
@@ -21,31 +31,29 @@ const MIN_QUALITY = 0;
 const MIN_SELLIN = 0;
 
 const updateAgedBrie = (item: Item) => {
-  item.quality = Math.min(MAX_QUALITY, item.quality + 1);
+  item.increaseQuality(1);
   item.sellIn -= 1;
-  if (item.sellIn < MIN_SELLIN) item.quality = Math.min(MAX_QUALITY, item.quality + 1);
+  if (item.sellIn < MIN_SELLIN) item.increaseQuality(1);
 };
 
 const updateBackstagePasses = (item: Item) => {
   if (item.sellIn < 6) {
-    item.quality = Math.min(MAX_QUALITY, item.quality + 3);
+    item.increaseQuality(3);
   } else if (item.sellIn < 11) {
-    item.quality = Math.min(MAX_QUALITY, item.quality + 2);
+    item.increaseQuality(2);
   } else {
-    item.quality = Math.min(MAX_QUALITY, item.quality + 1);
+    item.increaseQuality(1);
   }
   item.sellIn -= 1;
-  if (item.sellIn < MIN_SELLIN) item.quality = 0;
+  if (item.sellIn < MIN_SELLIN) item.updateQuality(0);
 };
 
 const updateSulfuras = (item: Item) => {};
 
 const updateDefault = (item: Item) => {
-  if (item.quality > MIN_QUALITY) {
-    item.quality -= 1;
-  }
+  item.decreaseQuality(1);
   item.sellIn -= 1;
-  if (item.sellIn < MIN_SELLIN && item.quality > MIN_QUALITY) item.quality -= 1;
+  if (item.sellIn < MIN_SELLIN) item.decreaseQuality(1);
 };
 
 export class GildedRose {
