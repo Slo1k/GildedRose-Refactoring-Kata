@@ -1,5 +1,19 @@
 # Changes Made to Gilded Rose Codebase
 
+## Jakub Kozłowski
+
+### 1. Implemented update functions for each item type
+- It ensures easy code maintenance and clarity.
+
+### 2. Added constructor types
+- It ensured type safety to the class.
+
+### 3. Added const variables
+- When it comes to changing the common value, it requires only one place to update it.
+
+### 4. Implemented quality value manipulation functions
+- It is easier to read what piece of code does and also helps with future implementation.
+
 ## Adam Kopiec
 ### 1. Added Strategy Pattern
 
