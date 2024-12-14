@@ -46,10 +46,6 @@ class BackstagePassesStrategy implements ItemUpdateStrategy {
   }
 }
 
-class SulfurasStrategy implements ItemUpdateStrategy {
-  update(item: Item) {}
-}
-
 class DefaultStrategy implements ItemUpdateStrategy {
   update(item: Item) {
     item.decreaseQuality(1);
@@ -64,10 +60,10 @@ const ItemTypes = {
   SULFURAS: "Sulfuras, Hand of Ragnaros",
 };
 
-const strategyRegistry: { [key: string]: ItemUpdateStrategy} = {
+const strategyRegistry: { [key: string]: ItemUpdateStrategy | null} = {
   [ItemTypes.AGED_BRIE]: new AgedBrieStrategy(),
   [ItemTypes.BACKSTAGE_PASSES]: new BackstagePassesStrategy(),
-  [ItemTypes.SULFURAS]: new SulfurasStrategy(),
+  [ItemTypes.SULFURAS]: null,
   default: new DefaultStrategy(),
 };
 
@@ -86,7 +82,7 @@ export class GildedRose {
     for (const item of this.items) {
       const strategy = strategyRegistry[item.name] || strategyRegistry.default;
       
-      strategy.update(item);
+      strategy?.update(item);
     }
     return this.items;
   }
