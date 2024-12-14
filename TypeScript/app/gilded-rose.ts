@@ -75,32 +75,6 @@ const MAX_QUALITY = 50;
 const MIN_QUALITY = 0;
 const MIN_SELLIN = 0;
 
-const updateAgedBrie = (item: Item) => {
-  item.increaseQuality(1);
-  item.sellIn -= 1;
-  if (item.sellIn < MIN_SELLIN) item.increaseQuality(1);
-};
-
-const updateBackstagePasses = (item: Item) => {
-  if (item.sellIn < 6) {
-    item.increaseQuality(3);
-  } else if (item.sellIn < 11) {
-    item.increaseQuality(2);
-  } else {
-    item.increaseQuality(1);
-  }
-  item.sellIn -= 1;
-  if (item.sellIn < MIN_SELLIN) item.updateQuality(0);
-};
-
-const updateSulfuras = (item: Item) => {};
-
-const updateDefault = (item: Item) => {
-  item.decreaseQuality(1);
-  item.sellIn -= 1;
-  if (item.sellIn < MIN_SELLIN) item.decreaseQuality(1);
-};
-
 export class GildedRose {
   items: Array<Item>;
 
