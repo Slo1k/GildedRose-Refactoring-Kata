@@ -41,5 +41,4 @@
 **Justification:**
 - Implemented behavior for Conjured items, which was missing.
 
-- This fully implements the "Conjured" item behavior, which was missing before.
 - By using a dedicated strategy, we ensure the logic is separate from other items and adheres to the rules for conjured items.
