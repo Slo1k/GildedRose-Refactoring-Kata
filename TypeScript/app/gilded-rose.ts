@@ -20,10 +20,55 @@ export class Item {
   }
 }
 
+interface ItemUpdateStrategy {
+  update(item: Item): void;
+}
+
+class AgedBrieStrategy implements ItemUpdateStrategy {
+  update(item: Item) {
+    item.increaseQuality(1);
+    item.sellIn -= 1;
+    if (item.sellIn < MIN_SELLIN) item.increaseQuality(1);
+  }
+}
+
+class BackstagePassesStrategy implements ItemUpdateStrategy {
+  update(item: Item) {
+    if (item.sellIn < 6) {
+      item.increaseQuality(3);
+    } else if (item.sellIn < 11) {
+      item.increaseQuality(2);
+    } else {
+      item.increaseQuality(1);
+    }
+    item.sellIn -= 1;
+    if (item.sellIn < MIN_SELLIN) item.updateQuality(0);
+  }
+}
+
+class SulfurasStrategy implements ItemUpdateStrategy {
+  update(item: Item) {}
+}
+
+class DefaultStrategy implements ItemUpdateStrategy {
+  update(item: Item) {
+    item.decreaseQuality(1);
+    item.sellIn -= 1;
+    if (item.sellIn < MIN_SELLIN) item.decreaseQuality(1);
+  }
+}
+
 const ItemTypes = {
   AGED_BRIE: "Aged Brie",
   BACKSTAGE_PASSES: "Backstage passes to a TAFKAL80ETC concert",
   SULFURAS: "Sulfuras, Hand of Ragnaros",
+};
+
+const strategyRegistry: { [key: string]: ItemUpdateStrategy} = {
+  [ItemTypes.AGED_BRIE]: new AgedBrieStrategy(),
+  [ItemTypes.BACKSTAGE_PASSES]: new BackstagePassesStrategy(),
+  [ItemTypes.SULFURAS]: new SulfurasStrategy(),
+  default: new DefaultStrategy(),
 };
 
 const MAX_QUALITY = 50;
