@@ -37,3 +37,18 @@ describe("Gilded Rose", () => {
     }
   });
 });
+
+describe("Gilded Rose", () => {
+  it("should decrease the quality of Conjured Mana Cake by 2", () => {
+    const gildedRose = new GildedRose([new Item("Conjured Mana Cake", 5, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(8);
+
+    gildedRose.updateQuality();
+    expect(items[0].quality).toBe(6);
+    for (let day = 0; day < 40; day++) {
+      gildedRose.updateQuality();
+    }
+    expect(items[0].quality).toBe(0);
+  });
+});

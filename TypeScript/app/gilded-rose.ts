@@ -33,21 +33,34 @@ class AgedBrieStrategy implements ItemUpdateStrategy {
 }
 
 class BackstagePassesStrategy implements ItemUpdateStrategy {
+  private readonly qualityIncrements = [
+    { threshold: 5, increment: 3 },
+    { threshold: 10, increment: 2 },
+    { threshold: Infinity, increment: 1 },
+  ];
+
   update(item: Item) {
-    if (item.sellIn < 6) {
-      item.increaseQuality(3);
-    } else if (item.sellIn < 11) {
-      item.increaseQuality(2);
-    } else {
-      item.increaseQuality(1);
-    }
+    const increment = this.getQualityIncrement(item.sellIn);
+    item.increaseQuality(increment);
     item.sellIn -= 1;
     if (item.sellIn < MIN_SELLIN) item.updateQuality(0);
+  }
+
+  private getQualityIncrement(sellIn: number): number {
+    return this.qualityIncrements.find(({ threshold }) => sellIn <= threshold)?.increment || 0;
   }
 }
 
 class SulfurasStrategy implements ItemUpdateStrategy {
   update(item: Item) {}
+}
+
+class ConjuredStrategy implements ItemUpdateStrategy {
+  update(item: Item) {
+    item.decreaseQuality(2);
+    item.sellIn -= 1;
+    if (item.sellIn < MIN_SELLIN) item.decreaseQuality(2);
+  }
 }
 
 class DefaultStrategy implements ItemUpdateStrategy {
@@ -62,12 +75,14 @@ const ItemTypes = {
   AGED_BRIE: "Aged Brie",
   BACKSTAGE_PASSES: "Backstage passes to a TAFKAL80ETC concert",
   SULFURAS: "Sulfuras, Hand of Ragnaros",
+  CONJURED: "Conjured Mana Cake",
 };
 
 const strategyRegistry: { [key: string]: ItemUpdateStrategy} = {
   [ItemTypes.AGED_BRIE]: new AgedBrieStrategy(),
   [ItemTypes.BACKSTAGE_PASSES]: new BackstagePassesStrategy(),
   [ItemTypes.SULFURAS]: new SulfurasStrategy(),
+  [ItemTypes.CONJURED]: new ConjuredStrategy(),
   default: new DefaultStrategy(),
 };
 
