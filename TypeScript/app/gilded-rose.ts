@@ -110,20 +110,9 @@ export class GildedRose {
 
   updateQuality() {
     for (const item of this.items) {
-      switch (item.name) {
-        case ItemTypes.AGED_BRIE:
-          updateAgedBrie(item);
-          continue;
-        case ItemTypes.BACKSTAGE_PASSES:
-          updateBackstagePasses(item);
-          continue;
-        case ItemTypes.SULFURAS:
-          updateSulfuras(item);
-          continue;
-        default:
-          updateDefault(item);
-          continue;
-      }
+      const strategy = strategyRegistry[item.name] || strategyRegistry.default;
+      
+      strategy.update(item);
     }
     return this.items;
   }
