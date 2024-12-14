@@ -1,0 +1,40 @@
+# Changes Made to Gilded Rose Codebase
+
+## Adam Kopiec
+### 1. Refactored Update Logic to Use Strategy Pattern
+
+**Change:**
+- Created separate strategy classes for each item type:
+  - `AgedBrieStrategy`
+  - `BackstagePassesStrategy`
+  - `SulfurasStrategy`
+  - `ConjuredStrategy`
+  - `DefaultStrategy`
+- Added a `strategyRegistry` object to dynamically map items to their respective update logic.
+- Updated `GildedRose.updateQuality` to delegate item updates to the appropriate strategy.
+
+**Justification:**
+- Using the strategy pattern makes the code more modular by decoupling item-specific logic from the main `updateQuality` method.
+- Adding new item types is now straightforward—create a new strategy and register it in the `strategyRegistry`.
+- Improves readability by removing the large `switch` statement.
+
+### 2. Improved Backstage Passes Logic
+
+**Change:**
+- Encapsulated quality increment thresholds for Backstage Passes into an array of objects (e.g., `{ threshold: 5, increment: 3 }`).
+- Extracted a helper method, `getQualityIncrement`, to determine the increment based on `sellIn` days.
+
+**Justification:**
+- Encapsulating thresholds improves maintainability—adjusting thresholds or increments only requires changing the array.
+- The extracted method makes the logic more modular and easier to understand.
+- Simplifies testing of individual increments without affecting other parts of the code.
+
+### 3. Added Conjured Item Support
+
+**Change:**
+- Introduced a new `ConjuredStrategy` to handle items like "Conjured Mana Cake".
+- Ensured quality decreases twice as fast as normal items, and correctly reduces further after the `sellIn` date.
+
+**Justification:**
+- This fully implements the "Conjured" item behavior, which was missing before.
+- By using a dedicated strategy, we ensure the logic is separate from other items and adheres to the rules for conjured items.
