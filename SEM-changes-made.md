@@ -1,5 +1,20 @@
 # Changes Made to Gilded Rose Codebase
 
+## Mikołaj Krakowiak
+
+### 1. Adjusted main for loop of the program
+- It ensures better readability of the code and makes the structure simpler by avoiding the indices
+
+### 2. Simplified nested conditions
+- Reduces complexity and enhances clarity by minimizing unnecessary nesting.
+
+### 3. Meged conditions for certain items
+- Removes redundancy and ensures items rules are easier to maintain.
+
+### 4. Removed repeating quality conditions
+- Eliminates duplication, reducing potential errors and improving maintainability.
+
+
 ## Jakub Kozłowski
 
 ### 1. Implemented update functions for each item type
