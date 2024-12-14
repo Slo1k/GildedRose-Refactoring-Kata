@@ -53,3 +53,29 @@ describe("Gilded Rose", () => {
     expect(items[0].quality).to.equal(0);
   });
 });
+
+describe("Gilded Rose", () => {
+  it("should increase the quality of Backstage passes by 1 when sellIn is more than 10", () => {
+    const gildedRose = new GildedRose([new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(21);
+  });
+
+  it("should increase the quality of Backstage passes by 2 when sellIn is 10 or less", () => {
+    const gildedRose = new GildedRose([new Item("Backstage passes to a TAFKAL80ETC concert", 10, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(22);
+  });
+
+  it("should increase the quality of Backstage passes by 3 when sellIn is 5 or less", () => {
+    const gildedRose = new GildedRose([new Item("Backstage passes to a TAFKAL80ETC concert", 5, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(23);
+  });
+
+  it("should drop the quality of Backstage passes to 0 after the concert", () => {
+    const gildedRose = new GildedRose([new Item("Backstage passes to a TAFKAL80ETC concert", 0, 20)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).to.equal(0);
+  });
+});
